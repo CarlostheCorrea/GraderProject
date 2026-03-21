@@ -1,0 +1,47 @@
+{
+  "description": "Unified doctoral rubric",
+  "scale_labels": {
+    "1": "Insufficient",
+    "2": "Emerging",
+    "3": "Competent",
+    "4": "Exemplary"
+  },
+  "categories": [
+    {
+      "id": "A",
+      "name": "Originality and Contribution",
+      "weight": 0.35,
+      "criteria": [
+        {"id": "A1", "name": "Novelty", "description": "Work identifies a clear original contribution", "weight": 0.5},
+        {"id": "A2", "name": "Scholarly Positioning", "description": "Positions contribution in literature", "weight": 0.5}
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Methodological Rigor",
+      "weight": 0.4,
+      "criteria": [
+        {"id": "B1", "name": "Method Validity", "description": "Method is justified and reproducible", "weight": 0.5},
+        {"id": "B2", "name": "Analytical Precision", "description": "Reasoning is precise and defensible", "weight": 0.5}
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Argument Quality",
+      "weight": 0.25,
+      "criteria": [
+        {"id": "C1", "name": "Coherence", "description": "Argument structure is coherent", "weight": 0.5},
+        {"id": "C2", "name": "Implications", "description": "Implications and limits are critically discussed", "weight": 0.5}
+      ]
+    }
+  ],
+  "letter_grade_map": [
+    {"min_score": 3.8, "letter": "A"},
+    {"min_score": 3.5, "letter": "A-"},
+    {"min_score": 3.2, "letter": "B+"},
+    {"min_score": 2.9, "letter": "B"},
+    {"min_score": 2.6, "letter": "C+"},
+    {"min_score": 2.3, "letter": "C"},
+    {"min_score": 0.0, "letter": "F"}
+  ]
+}

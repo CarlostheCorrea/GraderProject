@@ -1,0 +1,47 @@
+{
+  "description": "College cross-disciplinary rubric",
+  "scale_labels": {
+    "1": "Beginning",
+    "2": "Developing",
+    "3": "Proficient",
+    "4": "Advanced"
+  },
+  "categories": [
+    {
+      "id": "A",
+      "name": "Thesis and Purpose",
+      "weight": 0.3,
+      "criteria": [
+        {"id": "A1", "name": "Claim Clarity", "description": "Clear arguable central claim", "weight": 0.5},
+        {"id": "A2", "name": "Scope Control", "description": "Scope matches assignment and argument", "weight": 0.5}
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Evidence and Analysis",
+      "weight": 0.45,
+      "criteria": [
+        {"id": "B1", "name": "Evidence Quality", "description": "Evidence is specific and relevant", "weight": 0.5},
+        {"id": "B2", "name": "Analytical Depth", "description": "Analysis links evidence to claim", "weight": 0.5}
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Organization and Style",
+      "weight": 0.25,
+      "criteria": [
+        {"id": "C1", "name": "Organization", "description": "Logical progression and transitions", "weight": 0.5},
+        {"id": "C2", "name": "Academic Tone", "description": "Clear formal style and mechanics", "weight": 0.5}
+      ]
+    }
+  ],
+  "letter_grade_map": [
+    {"min_score": 3.7, "letter": "A"},
+    {"min_score": 3.3, "letter": "B+"},
+    {"min_score": 3.0, "letter": "B"},
+    {"min_score": 2.7, "letter": "C+"},
+    {"min_score": 2.3, "letter": "C"},
+    {"min_score": 2.0, "letter": "D"},
+    {"min_score": 0.0, "letter": "F"}
+  ]
+}

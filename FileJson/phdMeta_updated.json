@@ -1,0 +1,251 @@
+{
+  "rubric_id": "phd_unified_meta_v3",
+  "name": "Unified PhD-Level Academic Paper Rubric",
+  "version": "3.1",
+  "description": "Comprehensive rubric for evaluating doctoral-level academic writing including dissertation chapters, proposals, qualifying exams, comprehensive exams, and publishable scholarly manuscripts.",
+  "scale": {
+    "min": 1,
+    "max": 4,
+    "labels": {
+      "1": "Unsatisfactory",
+      "2": "Emerging",
+      "3": "Proficient",
+      "4": "Exemplary"
+    },
+    "grading_rule": "No partial scores. Select the level whose descriptor is most fully satisfied."
+  },
+  "scoring": {
+    "aggregation": "weighted_average",
+    "overall_range": [
+      1,
+      4
+    ],
+    "overall_score_range": [
+      1,
+      4
+    ],
+    "letter_grade_map": [
+      {
+        "min_inclusive": 3.7,
+        "max_inclusive": 4.0,
+        "grade": "A"
+      },
+      {
+        "min_inclusive": 3.3,
+        "max_inclusive": 3.69,
+        "grade": "A-"
+      },
+      {
+        "min_inclusive": 3.0,
+        "max_inclusive": 3.29,
+        "grade": "B+"
+      },
+      {
+        "min_inclusive": 2.7,
+        "max_inclusive": 2.99,
+        "grade": "B"
+      },
+      {
+        "min_inclusive": 2.3,
+        "max_inclusive": 2.69,
+        "grade": "B-"
+      },
+      {
+        "min_inclusive": 2.0,
+        "max_inclusive": 2.29,
+        "grade": "C"
+      },
+      {
+        "min_inclusive": 0.0,
+        "max_inclusive": 1.99,
+        "grade": "Needs Major Revision"
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "A",
+      "name": "Problem Framing, Significance, and Conceptual Clarity",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "A1",
+          "name": "Problem Definition and Boundaries",
+          "anchors": {
+            "4": "The problem is explicitly defined, clearly bounded, situated within disciplinary context, and differentiated from adjacent issues. Scope is precise and appropriate for doctoral inquiry.",
+            "3": "The problem is clearly defined and generally bounded, though minor ambiguity remains.",
+            "2": "The problem is partially defined or overly broad; boundaries unclear.",
+            "1": "The problem is vague, ill-defined, trivial, or unsupported."
+          }
+        },
+        {
+          "id": "A2",
+          "name": "Contextualization and Significance",
+          "anchors": {
+            "4": "The problem is deeply situated in historical, social, cultural, theoretical, or policy contexts. Significance (including equity or ethical dimensions when relevant) is rigorously analyzed.",
+            "3": "The problem is contextualized and significance is clearly explained.",
+            "2": "Context is mentioned but thin; significance insufficiently developed.",
+            "1": "Context or significance is absent or superficial."
+          }
+        },
+        {
+          "id": "A3",
+          "name": "Key Concepts and Definitions",
+          "anchors": {
+            "4": "Key concepts are precisely defined, theoretically grounded, and explicitly tied to the problem.",
+            "3": "Key concepts are defined and generally connected to the problem.",
+            "2": "Concepts are loosely defined or insufficiently explained.",
+            "1": "Key terms are undefined or misused."
+          }
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Literature Mastery and Theoretical Integration",
+      "weight": 0.25,
+      "criteria": [
+        {
+          "id": "B1",
+          "name": "Comprehensiveness and Currency of Literature",
+          "anchors": {
+            "4": "Engages an exhaustive, current, and relevant body of empirical and theoretical literature appropriate for doctoral scholarship.",
+            "3": "Engages a strong and relevant body of literature.",
+            "2": "Literature base is limited, dated, or incomplete.",
+            "1": "Literature is minimal, inappropriate, or largely absent."
+          }
+        },
+        {
+          "id": "B2",
+          "name": "Synthesis (Not Summary)",
+          "anchors": {
+            "4": "Synthesizes literature to identify themes, tensions, gaps, inconsistencies, and patterns. Moves beyond summary to analytic integration.",
+            "3": "Demonstrates clear synthesis with some thematic integration.",
+            "2": "Primarily summarizes literature with limited synthesis.",
+            "1": "Literature is reported without analysis or synthesis."
+          }
+        },
+        {
+          "id": "B3",
+          "name": "Theoretical Framework Application and Critique",
+          "anchors": {
+            "4": "Selects appropriate theoretical framework(s), justifies selection, applies them rigorously, and critically examines their assumptions and limitations.",
+            "3": "Selects and applies relevant framework(s) appropriately.",
+            "2": "Framework is identified but weakly applied or insufficiently critiqued.",
+            "1": "Framework inappropriate, misapplied, or absent."
+          }
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Methodological Rigor (if empirical) or Analytical Rigor (if conceptual)",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "C1",
+          "name": "Alignment of Research Questions, Design, and Analysis",
+          "anchors": {
+            "4": "Research questions, design, data collection, and analysis are tightly aligned and logically justified. Rationale is explicit and persuasive.",
+            "3": "Components are aligned and adequately justified.",
+            "2": "Alignment is partial or weakly justified.",
+            "1": "Design and analysis are misaligned or unjustified."
+          }
+        },
+        {
+          "id": "C2",
+          "name": "Procedural Transparency and Rigor",
+          "anchors": {
+            "4": "Procedures are described with sufficient detail for replication; methodological limitations and ethical considerations are explicitly addressed.",
+            "3": "Procedures are clearly described with minor gaps.",
+            "2": "Procedures lack sufficient detail or clarity.",
+            "1": "Procedures are unclear, missing, or methodologically flawed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Analysis, Interpretation, and Implications",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "D1",
+          "name": "Evidence-to-Claim Reasoning",
+          "anchors": {
+            "4": "Claims are consistently supported by data or literature; reasoning is explicit, logically coherent, and analytically sophisticated.",
+            "3": "Claims are generally supported with sound reasoning.",
+            "2": "Some claims lack adequate support or contain reasoning gaps.",
+            "1": "Claims are unsupported, contradictory, or logically flawed."
+          }
+        },
+        {
+          "id": "D2",
+          "name": "Implications and Contribution",
+          "anchors": {
+            "4": "Articulates meaningful theoretical, methodological, or practical contributions that extend the field. Implications are contextually and ethically sensitive.",
+            "3": "Implications logically follow from analysis.",
+            "2": "Implications are present but underdeveloped.",
+            "1": "No clear contribution or implications."
+          }
+        },
+        {
+          "id": "D3",
+          "name": "Synthesis and Conclusion",
+          "anchors": {
+            "4": "Conclusions synthesize prior analysis into a coherent and conceptually advanced understanding of the problem.",
+            "3": "Conclusions logically follow from analysis.",
+            "2": "Conclusions restate rather than synthesize findings.",
+            "1": "Conclusions are absent or disconnected from analysis."
+          }
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Scholarly Writing and Professional Standards",
+      "weight": 0.15,
+      "criteria": [
+        {
+          "id": "E1",
+          "name": "Coherent and Convincing Argument",
+          "anchors": {
+            "4": "Maintains a clear, persuasive, and sustained argument throughout, consistently supported by credible evidence.",
+            "3": "Argument is coherent and supported.",
+            "2": "Argument is emerging but uneven.",
+            "1": "Argument is unclear or unsupported."
+          }
+        },
+        {
+          "id": "E2",
+          "name": "Organization and Structural Clarity",
+          "anchors": {
+            "4": "Uses organizational structures skillfully (clear headings, logical sequencing, smooth transitions).",
+            "3": "Organization is clear and consistent.",
+            "2": "Organization is inconsistent or mechanical.",
+            "1": "Paper is disorganized and difficult to follow."
+          }
+        },
+        {
+          "id": "E3",
+          "name": "Mechanics, APA, and Bias-Free Language",
+          "anchors": {
+            "4": "Virtually no mechanical errors; consistent mastery of citation style; adheres to bias-free scholarly language conventions.",
+            "3": "Minor errors that do not impede comprehension.",
+            "2": "Noticeable errors that occasionally impede comprehension.",
+            "1": "Frequent errors that undermine credibility or readability."
+          }
+        }
+      ]
+    }
+  ],
+  "evidence_policy": {
+    "quotes_per_criterion": {
+      "min": 1,
+      "max": 2
+    },
+    "max_words_per_quote": 25,
+    "quote_requirements": "Use direct short quotes from the document as evidence. If the document does not contain enough information for a criterion, state what is missing and score conservatively.",
+    "no_evidence_handling": "If no direct textual evidence exists for a criterion (e.g., missing sections), assign a 1 and explain what is missing."
+  }
+}

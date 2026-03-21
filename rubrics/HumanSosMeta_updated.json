@@ -1,0 +1,47 @@
+{
+  "description": "Humanities and social sciences meta rubric",
+  "scale_labels": {
+    "1": "Beginning",
+    "2": "Developing",
+    "3": "Proficient",
+    "4": "Advanced"
+  },
+  "categories": [
+    {
+      "id": "A",
+      "name": "Interpretive Claim",
+      "weight": 0.3,
+      "criteria": [
+        {"id": "A1", "name": "Thesis", "description": "Interpretive claim is specific and arguable", "weight": 0.6},
+        {"id": "A2", "name": "Context", "description": "Historical/social context is integrated", "weight": 0.4}
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Use of Sources",
+      "weight": 0.4,
+      "criteria": [
+        {"id": "B1", "name": "Source Selection", "description": "Sources are relevant and credible", "weight": 0.5},
+        {"id": "B2", "name": "Source Interpretation", "description": "Sources are interpreted accurately", "weight": 0.5}
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Reasoning and Communication",
+      "weight": 0.3,
+      "criteria": [
+        {"id": "C1", "name": "Reasoning", "description": "Claims are supported by explicit reasoning", "weight": 0.5},
+        {"id": "C2", "name": "Writing Quality", "description": "Writing is clear and logically organized", "weight": 0.5}
+      ]
+    }
+  ],
+  "letter_grade_map": [
+    {"min_score": 3.7, "letter": "A"},
+    {"min_score": 3.3, "letter": "B+"},
+    {"min_score": 3.0, "letter": "B"},
+    {"min_score": 2.7, "letter": "C+"},
+    {"min_score": 2.3, "letter": "C"},
+    {"min_score": 2.0, "letter": "D"},
+    {"min_score": 0.0, "letter": "F"}
+  ]
+}

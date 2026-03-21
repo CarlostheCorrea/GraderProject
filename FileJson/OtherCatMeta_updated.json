@@ -1,0 +1,190 @@
+{
+  "rubric_id": "college_cross_disciplinary_other_v1",
+  "name": "College-Level Cross-Disciplinary Competency Rubric",
+  "description": "Evaluates general academic competencies that apply across disciplines, including reasoning, problem framing, quantitative or logical analysis, ethical awareness, and reflective thinking.",
+  "version": "1.1",
+  "scale": {
+    "min": 1,
+    "max": 4,
+    "labels": {
+      "1": "Minimal / Insufficient",
+      "2": "Basic / Emerging",
+      "3": "Competent / Proficient",
+      "4": "Advanced / Sophisticated"
+    },
+    "grading_rule": "Assign the level that best matches the overall demonstrated performance for each criterion. Do not average sub-phrases; select the closest holistic description."
+  },
+  "categories": [
+    {
+      "id": "A",
+      "name": "Problem or Issue Framing",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "A1",
+          "name": "Clarity and Scope of the Problem/Question",
+          "anchors": {
+            "4": "Clearly defines a focused, well-scoped problem or question. Identifies relevant contextual factors (historical, social, technical, ethical, or practical constraints). Demonstrates awareness of complexity and boundaries of the issue.",
+            "3": "Defines a clear problem or question and identifies most relevant contextual factors. Scope is appropriate but may not fully address complexity or limitations.",
+            "2": "States a general problem or question but lacks precision or clear boundaries. Contextual factors are partially identified or oversimplified.",
+            "1": "Problem or question is vague, overly broad, or unclear. Context is missing or incorrect."
+          }
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Analytical and Logical Reasoning",
+      "weight": 0.25,
+      "criteria": [
+        {
+          "id": "B1",
+          "name": "Use of Evidence and Logic",
+          "anchors": {
+            "4": "Uses relevant evidence, data, examples, or logical reasoning to build a coherent and well-supported argument. Evaluates the reliability or limitations of information when appropriate.",
+            "3": "Uses appropriate evidence or reasoning to support claims. Minor gaps in evaluation of sources or logic may be present.",
+            "2": "Uses some evidence or reasoning but connections to claims are weak or partially unsupported. Limited evaluation of source credibility.",
+            "1": "Claims are largely unsupported. Evidence, if present, is not clearly connected or evaluated."
+          }
+        },
+        {
+          "id": "B2",
+          "name": "Depth of Analysis",
+          "anchors": {
+            "4": "Demonstrates thorough analysis, explores multiple dimensions of the issue, and considers alternative explanations or approaches.",
+            "3": "Provides solid analysis with some exploration of complexity or alternative perspectives.",
+            "2": "Analysis is mostly descriptive or surface-level with limited exploration of complexity.",
+            "1": "Little to no analysis; primarily summary or unsupported opinion."
+          }
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Quantitative, Technical, or Structured Reasoning (When Applicable)",
+      "weight": 0.15,
+      "criteria": [
+        {
+          "id": "C1",
+          "name": "Interpretation and Application of Data or Structured Methods",
+          "anchors": {
+            "4": "Accurately interprets numerical, technical, or structured information and applies it effectively to support conclusions. Recognizes limitations or assumptions.",
+            "3": "Correctly interprets and applies structured or quantitative information with minor inaccuracies or limited discussion of assumptions.",
+            "2": "Attempts interpretation but contains errors or incomplete application. Assumptions are not clearly addressed.",
+            "1": "Misinterprets data or fails to apply structured reasoning appropriately."
+          }
+        }
+      ],
+      "optional": true,
+      "include_when": "Include only when the document uses quantitative, technical, or structured methods (e.g., statistical analysis, formulas, algorithms, formal models) OR when the user explicitly selects 'Include quantitative/technical reasoning'.",
+      "weight_behavior": {
+        "if_excluded": "redistribute_proportionally_across_included_categories",
+        "note": "If this optional category is excluded, redistribute its weight across the remaining categories in proportion to their original weights so the total remains 1.0."
+      }
+    },
+    {
+      "id": "D",
+      "name": "Ethical and Contextual Awareness",
+      "weight": 0.15,
+      "criteria": [
+        {
+          "id": "D1",
+          "name": "Recognition of Assumptions, Bias, and Implications",
+          "anchors": {
+            "4": "Explicitly identifies underlying assumptions and considers ethical, cultural, or contextual implications. Demonstrates thoughtful awareness of potential bias.",
+            "3": "Acknowledges some assumptions or ethical/contextual implications, though analysis may lack depth.",
+            "2": "Limited or superficial recognition of assumptions or implications.",
+            "1": "No recognition of assumptions, bias, or broader implications."
+          }
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Solution Development or Conclusion Quality",
+      "weight": 0.15,
+      "criteria": [
+        {
+          "id": "E1",
+          "name": "Quality and Feasibility of Conclusions or Proposed Solutions",
+          "anchors": {
+            "4": "Conclusions or proposed solutions are logical, feasible, and clearly derived from analysis. Addresses potential consequences or limitations.",
+            "3": "Conclusions or solutions are reasonable and mostly supported by analysis. Limited discussion of consequences.",
+            "2": "Conclusions or solutions are loosely connected to analysis or insufficiently justified.",
+            "1": "Conclusions are unsupported, unclear, or inconsistent with the analysis."
+          }
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "name": "Communication and Organization",
+      "weight": 0.1,
+      "criteria": [
+        {
+          "id": "F1",
+          "name": "Clarity, Structure, and Professional Tone",
+          "anchors": {
+            "4": "Writing is clear, logically structured, and professionally presented. Ideas flow coherently with effective transitions.",
+            "3": "Writing is generally clear and organized. Minor structural or clarity issues.",
+            "2": "Writing is uneven or occasionally unclear. Organization may be inconsistent.",
+            "1": "Writing is disorganized, unclear, or difficult to follow."
+          }
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "aggregation": "weighted_average",
+    "overall_score_range": [
+      1,
+      4
+    ],
+    "letter_grade_map": [
+      {
+        "min_inclusive": 3.7,
+        "max_inclusive": 4.0,
+        "grade": "A"
+      },
+      {
+        "min_inclusive": 3.3,
+        "max_inclusive": 3.69,
+        "grade": "A-"
+      },
+      {
+        "min_inclusive": 3.0,
+        "max_inclusive": 3.29,
+        "grade": "B+"
+      },
+      {
+        "min_inclusive": 2.7,
+        "max_inclusive": 2.99,
+        "grade": "B"
+      },
+      {
+        "min_inclusive": 2.3,
+        "max_inclusive": 2.69,
+        "grade": "B-"
+      },
+      {
+        "min_inclusive": 2.0,
+        "max_inclusive": 2.29,
+        "grade": "C"
+      },
+      {
+        "min_inclusive": 0.0,
+        "max_inclusive": 1.99,
+        "grade": "Needs Major Revision"
+      }
+    ]
+  },
+  "evidence_policy": {
+    "quotes_per_criterion": {
+      "min": 1,
+      "max": 2
+    },
+    "max_words_per_quote": 25,
+    "quote_requirements": "Use direct short quotes from the document as evidence. If the document does not contain enough information for a criterion, state what is missing and score conservatively.",
+    "no_evidence_handling": "If no direct textual evidence exists for a criterion (e.g., missing sections), assign a 1 and explain what is missing."
+  }
+}

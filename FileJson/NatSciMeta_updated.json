@@ -1,0 +1,207 @@
+{
+  "rubric_id": "essay_quality_v2",
+  "name": "General Academic Essay Quality Rubric (Precision Anchors)",
+  "version": "2.1",
+  "description": "Evaluates academic essay quality using detailed performance descriptors designed for consistent AI grading.",
+  "scale": {
+    "min": 1,
+    "max": 4,
+    "labels": {
+      "1": "Poor",
+      "2": "Developing",
+      "3": "Proficient",
+      "4": "Excellent"
+    },
+    "notes": "Select one whole-number level per criterion. Match the essay to the closest full descriptor."
+  },
+  "scoring": {
+    "aggregation": "weighted_average",
+    "overall_score_range": [
+      1,
+      4
+    ],
+    "letter_grade_map": [
+      {
+        "min_inclusive": 3.7,
+        "max_inclusive": 4.0,
+        "grade": "A"
+      },
+      {
+        "min_inclusive": 3.3,
+        "max_inclusive": 3.69,
+        "grade": "A-"
+      },
+      {
+        "min_inclusive": 3.0,
+        "max_inclusive": 3.29,
+        "grade": "B+"
+      },
+      {
+        "min_inclusive": 2.7,
+        "max_inclusive": 2.99,
+        "grade": "B"
+      },
+      {
+        "min_inclusive": 2.3,
+        "max_inclusive": 2.69,
+        "grade": "B-"
+      },
+      {
+        "min_inclusive": 2.0,
+        "max_inclusive": 2.29,
+        "grade": "C"
+      },
+      {
+        "min_inclusive": 0.0,
+        "max_inclusive": 1.99,
+        "grade": "Needs Major Revision"
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "A",
+      "name": "Thesis and Argument",
+      "weight": 0.25,
+      "criteria": [
+        {
+          "id": "A1",
+          "name": "Clarity, Specificity, and Arguability of Thesis",
+          "anchors": {
+            "4": "The thesis is explicit, specific, and arguable. It clearly responds to the prompt, defines scope and position, and signals the main line of reasoning. A reader can predict the essay’s direction from the thesis alone.",
+            "3": "The thesis clearly responds to the prompt and presents a position, but may lack precision, scope boundaries, or predictive clarity about the essay’s structure.",
+            "2": "A thesis is present but vague, overly broad, descriptive rather than argumentative, or only partially responsive to the prompt.",
+            "1": "No identifiable thesis, or the thesis is off-topic, purely summary, or non-arguable."
+          }
+        },
+        {
+          "id": "A2",
+          "name": "Logical Development and Consistency of Argument",
+          "anchors": {
+            "4": "All major claims logically follow from the thesis and are consistently developed. Reasoning is explicit, free of contradictions, and progresses cumulatively toward a persuasive conclusion.",
+            "3": "The argument is generally logical and consistent, though minor gaps in reasoning or underdeveloped sections may appear.",
+            "2": "The argument shows noticeable gaps in logic, unsupported assertions, or inconsistent reasoning across sections.",
+            "1": "The argument lacks coherence, contains major logical flaws, or consists primarily of unsupported claims."
+          }
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Use of Evidence and Support",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "B1",
+          "name": "Quality and Relevance of Evidence",
+          "anchors": {
+            "4": "Evidence is credible, specific, and directly relevant to each major claim. Sources (if required) are authoritative and appropriate for academic writing.",
+            "3": "Most evidence is relevant and appropriate, though some examples may be general or not fully aligned with claims.",
+            "2": "Evidence is limited, overly general, weakly connected to claims, or inconsistently credible.",
+            "1": "Evidence is absent, irrelevant, anecdotal, or inappropriate for the academic context."
+          }
+        },
+        {
+          "id": "B2",
+          "name": "Integration and Analytical Use of Evidence",
+          "anchors": {
+            "4": "Evidence is introduced, contextualized, and followed by clear explanation showing how it supports the argument. Analysis outweighs summary.",
+            "3": "Evidence is generally explained, though some sections rely more on summary than analysis.",
+            "2": "Evidence is inserted with minimal explanation or connection to the thesis.",
+            "1": "Evidence is dropped into the text without explanation, or paragraphs consist primarily of summary."
+          }
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Organization and Structural Coherence",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "C1",
+          "name": "Macro-Level Organization (Essay Structure)",
+          "anchors": {
+            "4": "The essay has a clear introduction, logically sequenced body sections, and a conclusion that synthesizes rather than repeats. Transitions guide the reader seamlessly.",
+            "3": "The essay structure is clear and mostly logical, though transitions or sequencing may occasionally feel mechanical or abrupt.",
+            "2": "Basic structure exists but sections may be uneven, loosely connected, or poorly sequenced.",
+            "1": "The essay lacks clear structure or progression; ideas appear randomly arranged."
+          }
+        },
+        {
+          "id": "C2",
+          "name": "Paragraph Unity and Development",
+          "anchors": {
+            "4": "Each paragraph has a clear controlling idea, sufficient development, and internal coherence. Topic sentences align with the thesis.",
+            "3": "Most paragraphs are focused and developed, though a few may lack depth or clear alignment.",
+            "2": "Paragraphs are uneven, contain multiple unrelated ideas, or lack sufficient explanation.",
+            "1": "Paragraphs lack clear focus or development."
+          }
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Critical Thinking and Depth",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "D1",
+          "name": "Depth, Nuance, and Complexity",
+          "anchors": {
+            "4": "Demonstrates nuanced understanding, explores implications, acknowledges limitations, and avoids oversimplification.",
+            "3": "Demonstrates solid understanding with some attention to complexity or nuance.",
+            "2": "Ideas are generally straightforward with limited exploration of complexity.",
+            "1": "Analysis is superficial, simplistic, or purely descriptive."
+          }
+        },
+        {
+          "id": "D2",
+          "name": "Engagement with Counterarguments or Alternative Perspectives",
+          "anchors": {
+            "4": "Identifies credible opposing viewpoints and responds with reasoned rebuttal or synthesis.",
+            "3": "Acknowledges opposing viewpoints but engagement may be brief or partially developed.",
+            "2": "Mentions alternative views without meaningful engagement.",
+            "1": "Ignores alternative viewpoints entirely."
+          }
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Clarity, Style, and Mechanics",
+      "weight": 0.15,
+      "criteria": [
+        {
+          "id": "E1",
+          "name": "Clarity and Precision of Language",
+          "anchors": {
+            "4": "Language is precise, concise, and academically appropriate. Sentences vary in structure and enhance readability.",
+            "3": "Language is generally clear and appropriate, with occasional awkward phrasing.",
+            "2": "Writing contains noticeable awkwardness, wordiness, or imprecision.",
+            "1": "Frequent unclear phrasing, vague wording, or informal tone inappropriate for academic writing."
+          }
+        },
+        {
+          "id": "E2",
+          "name": "Grammar, Mechanics, and Formatting",
+          "anchors": {
+            "4": "Virtually no grammatical, spelling, or punctuation errors. Formatting and citations (if required) are correct.",
+            "3": "Minor errors that do not interfere with comprehension.",
+            "2": "Repeated mechanical errors that occasionally distract the reader.",
+            "1": "Frequent errors that significantly interfere with readability."
+          }
+        }
+      ]
+    }
+  ],
+  "evidence_policy": {
+    "quotes_per_criterion": {
+      "min": 1,
+      "max": 2
+    },
+    "max_words_per_quote": 25,
+    "quote_requirements": "Use direct short quotes from the document as evidence. If the document does not contain enough information for a criterion, state what is missing and score conservatively.",
+    "no_evidence_handling": "If no direct textual evidence exists for a criterion (e.g., missing sections), assign a 1 and explain what is missing."
+  }
+}

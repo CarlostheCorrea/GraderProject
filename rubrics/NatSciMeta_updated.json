@@ -1,0 +1,47 @@
+{
+  "description": "Natural sciences essay quality rubric",
+  "scale_labels": {
+    "1": "Beginning",
+    "2": "Developing",
+    "3": "Proficient",
+    "4": "Advanced"
+  },
+  "categories": [
+    {
+      "id": "A",
+      "name": "Research Framing",
+      "weight": 0.25,
+      "criteria": [
+        {"id": "A1", "name": "Question Definition", "description": "Research question is explicit and testable", "weight": 0.5},
+        {"id": "A2", "name": "Background", "description": "Context and prior work are relevant", "weight": 0.5}
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Methods and Evidence",
+      "weight": 0.45,
+      "criteria": [
+        {"id": "B1", "name": "Method Rationale", "description": "Method choice is justified", "weight": 0.4},
+        {"id": "B2", "name": "Data Use", "description": "Data/evidence are accurate and sufficient", "weight": 0.6}
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Interpretation",
+      "weight": 0.3,
+      "criteria": [
+        {"id": "C1", "name": "Limitations", "description": "Acknowledges uncertainty and limits", "weight": 0.5},
+        {"id": "C2", "name": "Conclusions", "description": "Conclusions align with evidence", "weight": 0.5}
+      ]
+    }
+  ],
+  "letter_grade_map": [
+    {"min_score": 3.7, "letter": "A"},
+    {"min_score": 3.3, "letter": "B+"},
+    {"min_score": 3.0, "letter": "B"},
+    {"min_score": 2.7, "letter": "C+"},
+    {"min_score": 2.3, "letter": "C"},
+    {"min_score": 2.0, "letter": "D"},
+    {"min_score": 0.0, "letter": "F"}
+  ]
+}

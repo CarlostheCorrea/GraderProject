@@ -1,0 +1,50 @@
+﻿This reading report will be analyzing Network Effects: The Influence of Structural Capital on Open Source Project Success by Param Vir Singh, Yong Tan, and Vijay Mookerjee. The goal of the research was to see how different network factors affect the results of open source projects. Open source development is online user generated software where individuals, not large companies work on projects. Internet communities collaborate and help each other to improve software. Some commonly used open source software is R, Linux, and MySql.
+The data for this project was obtained from SourceForge.net, a platform widely used for hosting open-source software projects. The site hosts over 100,000 registered projects. Specific criteria are applied to determine whether a user is added to the network. A user must have “has sent at least 10 messages in project e-mail archives or contributed at least 5 times to CVS commits in addition to formal membership in the project”. Only 38% of the total projects had documentation limiting the sample size greatly.
+The authors made three hypotheses which revolve around the topics of internal cohesion, external cohesion, and technological diversity.  Internal cohesion is the connectedness of individuals within a project. The first hypothesis is “a moderate level of internal cohesion within a project is better for a project's success than very high or very low levels of internal cohesion”. The authors theorize that internal cohesion is good, allowing trust and knowledge sharing in the project. However, they speculate that too much internal cohesion could result in groupthink and people thinking similarly, overlooking alternate solutions. To measure this a repeat ties is used. Repeat ties is calculated by counting the total number of projects that a pair has worked on divided by the total number of pairs in a project. The higher this value is the more a group has worked together on multiple projects. To account for the proposed curvilinear relationship the repeat ties number is squared.
+External cohesion is the connectedness of individuals from other projects. The second hypothesis is “a moderate level of external cohesiveness is better for project success than very low or very high levels of external cohesiveness”. The authors believe that external cohesion is useful because higher external cohesion allows for more resources to be accessed and knowledge can be shared. Too much external cohesion can also be a hindrance on a project because if a large network repeats the same information it becomes an echo chamber of thought not being able to adapt to new solutions. To calculate external cohesion, the researchers used Burt's network constraint, an algorithm used to calculate how interconnected a node's adjacent nodes are. A higher score indicates a great internal cohesion. This score is also squared to match the curvilinear relationship proposed in the hypothesis. 
+Technological diversity is how users with different technological experience affect the results of a project. The third hypothesis is “a moderate level of technological diversity of contacts is better for a project's success than very low or very high levels of technological diversity”. The authors believe that more technologically diverse individuals can lead to the spread of knowledge and ideas, however if there are too many different skills, being able to assimilate all these different technologies in a project will hurt development. Each project is placed in one of these categories: project, programming language, user interface, and operating system. The angular separation or uncentered correlation is calculated between projects. The technological diversity is calculated between all projects that share a developer. It is the sum of the angular separation divided by the number of projects. A score of 1 has the greatest technological diversity, this score is squared to match the curvilinear relationship proposed in the hypothesis.
+Since open source projects continually develop, success has to be measured differently. The authors chose to use the rate of knowledge creation as their metric for success. This is defined by modification requests (MRs) which are changes made to the code of the project. MRs are logged as CVS commits in the project. So more of the changes in logs the more successful a project is. The authors used this as the dependent variable in the “regression analyses using hierarchical Bayesian random-effects estimation”. Internal cohesion, external cohesion, and technological diversity are the important predictors of the model.
+The results showed that we reject the first hypothesis. Internal cohesion does not have a U-shape. Squaring the repeat ties is not significant with a p-value greater than .1. This shows that a moderate level of internal cohesion does not have an effect on project performance. However, the researchers found that if the repeat ties are not squared then it is significant (P-value < .001). So the higher the repeat ties the more successful the project is. Hypothesis two and three are supported by the model. Both have a P-value < .001. These results show the U-shape of  external cohesion and technological diversity. Too much or too little external cohesion and technological diversity are not relevant to the success of the project. However a moderate level of external cohesion and technological diversity does enhance a project.
+I believe that there are some problems with the data collection. Only 38% of the total projects were open to analysis leaving a significant proportion of the data left unused. This has a large effect on internal cohesion, external cohesion and technological diversity. Internal cohesion checks if individuals have worked together before. With 62% of the data missing, the model could show people working together for the first time even though they have worked on the same project before. External cohesion measures how connected people in one project are to others. If the majority of projects are missing from the dataset, even well-connected individuals may appear to be isolated. The same can be said about technological diversity. If projects are missing, it becomes impossible to accurately track how technology evolves and moves across the network. So all this missing data could have a large effect on the reliability of the hypothesis.
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Citations
+Ren, Ruqin. “Hand Calculation of Burt’s Constraint in Networks.” Ruqin Ren, 22 Aug. 2022, ruqinren.wordpress.com/2018/03/01/hand-calculation-of-burts-constraint-in-networks/. Accessed 21 Apr. 2025.
+Singh, Param Vir, et al. “Network Effects: The Influence of Structural Capital on Open Source Project Success.” MIS Quarterly, 1 Dec. 2011, misq.umn.edu/network-effects-the-influence-of-structural-capital-on-open-source-project-success.html. Accessed 21 Apr. 2025.

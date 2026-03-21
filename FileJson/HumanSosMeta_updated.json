@@ -1,0 +1,234 @@
+{
+  "rubric_id": "college_humanities_social_sciences_meta_v2",
+  "name": "College-Level Humanities & Social Sciences Analytical Writing Rubric",
+  "version": "2.1",
+  "description": "Evaluates undergraduate analytical and research writing across humanities and social science disciplines, integrating standards of argumentation, evidence, conceptual understanding, and disciplinary rigor.",
+  "scale": {
+    "min": 1,
+    "max": 4,
+    "labels": {
+      "1": "Inadequate",
+      "2": "Developing",
+      "3": "Proficient",
+      "4": "Excellent"
+    },
+    "grading_rule": "Assign one whole-number score per criterion based strictly on the observable features of the paper."
+  },
+  "categories": [
+    {
+      "id": "A",
+      "name": "Thesis and Central Claim",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "A1",
+          "name": "Clarity and Debatability of Thesis",
+          "anchors": {
+            "4": "The paper presents a clearly stated, specific, and genuinely debatable thesis in the introduction. The thesis directly responds to the assignment and establishes a focused analytical direction.",
+            "3": "The paper presents a clear and arguable thesis, though it may be somewhat broad or lacking precision.",
+            "2": "The thesis is implied, vague, overly general, or partially descriptive rather than argumentative.",
+            "1": "No clear thesis is present, or the paper does not articulate a central claim."
+          }
+        },
+        {
+          "id": "A2",
+          "name": "Alignment of Argument to Thesis",
+          "anchors": {
+            "4": "All major sections and claims clearly and logically support the thesis; no major digressions or contradictions are present.",
+            "3": "Most sections support the thesis, though some connections may be underdeveloped.",
+            "2": "Several sections are weakly connected or drift from the thesis.",
+            "1": "Argument is unfocused or inconsistent with the stated thesis."
+          }
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Argumentation and Logical Reasoning",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "B1",
+          "name": "Logical Structure of Argument",
+          "anchors": {
+            "4": "Claims build logically upon one another; reasoning is explicit and easy to follow; premises and conclusions are clearly distinguishable.",
+            "3": "Argument is generally logical but may contain minor gaps or unclear reasoning steps.",
+            "2": "Argument contains noticeable logical gaps, weak transitions, or unsupported claims.",
+            "1": "Argument is incoherent, contradictory, or largely unsupported."
+          }
+        },
+        {
+          "id": "B2",
+          "name": "Engagement with Counterarguments",
+          "anchors": {
+            "4": "Acknowledges relevant alternative perspectives or counterarguments and responds to them with evidence or reasoning.",
+            "3": "Mentions alternative perspectives but response may be brief or partially developed.",
+            "2": "Counterarguments are mentioned superficially or left unresolved.",
+            "1": "No acknowledgment of alternative viewpoints when relevant."
+          }
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Use and Analysis of Evidence",
+      "weight": 0.2,
+      "criteria": [
+        {
+          "id": "C1",
+          "name": "Relevance and Sufficiency of Evidence",
+          "anchors": {
+            "4": "Evidence (texts, data, examples, theory, course materials) is well-chosen, relevant, and sufficient to support each major claim.",
+            "3": "Evidence generally supports claims, though some points may lack depth or precision.",
+            "2": "Evidence is uneven, limited, or insufficient to fully support claims.",
+            "1": "Little, irrelevant, or inaccurate evidence is provided."
+          }
+        },
+        {
+          "id": "C2",
+          "name": "Depth of Analysis",
+          "anchors": {
+            "4": "The writer consistently explains how evidence supports the argument; analysis clearly moves beyond summary to interpretation and evaluation.",
+            "3": "The writer provides analysis, though some sections rely more on description than interpretation.",
+            "2": "The paper summarizes material with minimal analytical explanation.",
+            "1": "Evidence is presented without analysis."
+          }
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Conceptual and Theoretical Understanding",
+      "weight": 0.15,
+      "criteria": [
+        {
+          "id": "D1",
+          "name": "Accuracy of Concepts and Theories",
+          "anchors": {
+            "4": "Key concepts and theories are accurately defined, clearly explained, and correctly applied.",
+            "3": "Concepts are generally accurate but explanations may lack precision.",
+            "2": "Concepts are partially misunderstood or inconsistently applied.",
+            "1": "Concepts are misused, undefined, or inaccurate."
+          }
+        },
+        {
+          "id": "D2",
+          "name": "Application of Course Materials",
+          "anchors": {
+            "4": "Effectively integrates readings, lectures, or disciplinary frameworks into the argument.",
+            "3": "Uses course materials appropriately but without deep integration.",
+            "2": "Mentions course materials but does not meaningfully integrate them.",
+            "1": "Fails to demonstrate engagement with relevant materials."
+          }
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Organization and Structure",
+      "weight": 0.15,
+      "criteria": [
+        {
+          "id": "E1",
+          "name": "Overall Organization",
+          "anchors": {
+            "4": "Clear introduction, logically ordered body paragraphs, and a conclusion that synthesizes (not merely repeats) key points.",
+            "3": "Logical organization with minor structural weaknesses.",
+            "2": "Basic structure present but transitions and sequencing are inconsistent.",
+            "1": "Paper lacks clear organizational structure."
+          }
+        },
+        {
+          "id": "E2",
+          "name": "Paragraph Coherence",
+          "anchors": {
+            "4": "Each paragraph has a clear topic sentence, focused development, and logical internal flow.",
+            "3": "Most paragraphs are coherent, though some lack clarity or full development.",
+            "2": "Several paragraphs lack focus or contain multiple unrelated ideas.",
+            "1": "Paragraphs are disorganized or underdeveloped."
+          }
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "name": "Clarity, Style, and Mechanics",
+      "weight": 0.1,
+      "criteria": [
+        {
+          "id": "F1",
+          "name": "Clarity and Academic Tone",
+          "anchors": {
+            "4": "Writing is clear, precise, and consistently academic in tone; terminology is defined when necessary.",
+            "3": "Writing is generally clear with minor stylistic issues.",
+            "2": "Writing is occasionally unclear, informal, or repetitive.",
+            "1": "Writing is frequently unclear or inappropriate in tone."
+          }
+        },
+        {
+          "id": "F2",
+          "name": "Grammar and Citation",
+          "anchors": {
+            "4": "Minimal grammatical errors; sources are properly cited and formatted.",
+            "3": "Minor grammar or citation issues that do not impede understanding.",
+            "2": "Repeated grammar or citation issues that distract the reader.",
+            "1": "Serious grammar errors or missing citations."
+          }
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "aggregation": "weighted_average",
+    "overall_score_range": [
+      1,
+      4
+    ],
+    "letter_grade_map": [
+      {
+        "min_inclusive": 3.7,
+        "max_inclusive": 4.0,
+        "grade": "A"
+      },
+      {
+        "min_inclusive": 3.3,
+        "max_inclusive": 3.69,
+        "grade": "A-"
+      },
+      {
+        "min_inclusive": 3.0,
+        "max_inclusive": 3.29,
+        "grade": "B+"
+      },
+      {
+        "min_inclusive": 2.7,
+        "max_inclusive": 2.99,
+        "grade": "B"
+      },
+      {
+        "min_inclusive": 2.3,
+        "max_inclusive": 2.69,
+        "grade": "B-"
+      },
+      {
+        "min_inclusive": 2.0,
+        "max_inclusive": 2.29,
+        "grade": "C"
+      },
+      {
+        "min_inclusive": 0.0,
+        "max_inclusive": 1.99,
+        "grade": "Needs Major Revision"
+      }
+    ]
+  },
+  "evidence_policy": {
+    "quotes_per_criterion": {
+      "min": 1,
+      "max": 2
+    },
+    "max_words_per_quote": 25,
+    "quote_requirements": "Use direct short quotes from the document as evidence. If the document does not contain enough information for a criterion, state what is missing and score conservatively.",
+    "no_evidence_handling": "If no direct textual evidence exists for a criterion (e.g., missing sections), assign a 1 and explain what is missing."
+  }
+}
