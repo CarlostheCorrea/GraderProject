@@ -11,7 +11,9 @@ def _criterion_index(rubric_json: dict) -> Dict[str, dict]:
         for criterion in category.get("criteria", []):
             idx[criterion["id"]] = {
                 "category_id": category["id"],
+                "category_name": category.get("name", category["id"]),
                 "category_weight": float(category.get("weight", 1.0)),
+                "criterion_name": criterion.get("name", criterion["id"]),
                 "criterion_weight": float(criterion.get("weight", 1.0)),
                 "criterion_desc": criterion.get("description", ""),
             }
@@ -30,6 +32,9 @@ def enforce_conservative_coverage(grading_result: dict, rubric_json: dict) -> di
                 criteria.append(
                     {
                         "criterion_id": cid,
+                        "criterion_name": criterion.get("name", cid),
+                        "category_id": category["id"],
+                        "category_name": category.get("name", category["id"]),
                         "score": 1,
                         "label": scale_labels.get("1", "Beginning"),
                         "evidence_quotes": ["Missing direct evidence for this criterion."],
@@ -39,6 +44,9 @@ def enforce_conservative_coverage(grading_result: dict, rubric_json: dict) -> di
                 continue
 
             item = existing[cid]
+            item["criterion_name"] = criterion.get("name", cid)
+            item["category_id"] = category["id"]
+            item["category_name"] = category.get("name", category["id"])
             evidence_quotes = sanitize_quotes(item.get("evidence_quotes", []))
             item["evidence_quotes"] = evidence_quotes
             if not evidence_quotes:
@@ -65,6 +73,9 @@ def compute_scores(grading_result: dict, rubric_json: dict) -> Tuple[dict, float
         if cid not in criteria_idx:
             continue
         meta = criteria_idx[cid]
+        item["criterion_name"] = meta["criterion_name"]
+        item["category_id"] = meta["category_id"]
+        item["category_name"] = meta["category_name"]
         grouped.setdefault(meta["category_id"], []).append(
             (float(item.get("score", 1)), meta["criterion_weight"])
         )

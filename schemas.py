@@ -53,6 +53,9 @@ class AskRequest(BaseModel):
 
 class GradingCriterionOutput(BaseModel):
     criterion_id: str
+    criterion_name: Optional[str] = None
+    category_id: Optional[str] = None
+    category_name: Optional[str] = None
     score: conint(ge=1, le=4)
     label: str
     evidence_quotes: List[str] = Field(default_factory=list, max_length=2)

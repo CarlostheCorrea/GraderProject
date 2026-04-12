@@ -88,9 +88,13 @@ function formatGradeResult(data) {
     ? criteria
         .map((criterion) => {
           const quotes = toBullet(criterion.evidence_quotes);
+          const criterionName = criterion.criterion_name || "Unnamed criterion";
+          const categoryName = criterion.category_name || criterion.category_id || "Uncategorized";
           return [
-            `${criterion.criterion_id} (${criterion.label})`,
+            criterionName,
+            `Category: ${categoryName}`,
             `Score: ${criterion.score}/4`,
+            `Level: ${criterion.label}`,
             `Justification: ${criterion.justification}`,
             `Evidence:`,
             quotes,

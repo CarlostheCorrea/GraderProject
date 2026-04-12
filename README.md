@@ -25,13 +25,15 @@ cd GraderProject
 macOS/Linux:
 
 ```bash
-export OPENAI_API_KEY="your_key_here"
+cp .env.example .env
+# Edit .env and replace the placeholder key.
 ```
 
 Windows PowerShell:
 
 ```powershell
-$env:OPENAI_API_KEY="your_key_here"
+Copy-Item .env.example .env
+# Edit .env and replace the placeholder key.
 ```
 
 ### 3. Run the app
@@ -48,7 +50,7 @@ Windows PowerShell:
 .\run.ps1
 ```
 
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
+Open [http://127.0.0.1:8017](http://127.0.0.1:8017).
 
 ## Manual Run (No Script)
 
@@ -56,7 +58,7 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app
+uvicorn main:app --host 127.0.0.1 --port 8017
 ```
 
 ## Frontend Workflow
@@ -133,14 +135,14 @@ Provided are example essays in different formats that can be used in the project
 ## Troubleshooting
 
 - `OPENAI_API_KEY is not set`:
-  - Set the environment variable, then rerun the app.
-- `Address already in use` on port 8000:
-  - Stop the process using port 8000, or run:
-  - `uvicorn main:app --port 8001`
+  - Set `OPENAI_API_KEY` in `.env` or export it in your shell, then rerun the app.
+- `Address already in use` on port 8017:
+  - Stop the process using port 8017, or run:
+  - `uvicorn main:app --host 127.0.0.1 --port 8018`
 - Browser shows stale UI behavior:
   - Hard refresh (`Cmd+Shift+R` on macOS, `Ctrl+F5` on Windows).
 - Server restarts repeatedly in a loop:
-  - Use stable mode without reload: `uvicorn main:app`
+  - Use stable mode without reload: `uvicorn main:app --host 127.0.0.1 --port 8017`
 
 ## Architecture & Request Flow
 

@@ -4,7 +4,8 @@ import logging
 from pathlib import Path
 from typing import Dict
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from dotenv import load_dotenv
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -29,6 +30,8 @@ from services.session_store import InMemorySessionStore
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s")
 logger = logging.getLogger(__name__)
 
+load_dotenv(Path(__file__).parent / ".env")
+
 app = FastAPI(title="Rubric Grader Backend", version="1.0.0")
 frontend_dir = Path(__file__).parent / "frontend"
 
@@ -38,6 +41,14 @@ session_store = InMemorySessionStore()
 llm_client: LLMClient | None = None
 langgraph_flow: LangGraphFlow | None = None
 pydanticai_flow: PydanticAIFlow | None = None
+
+
+@app.middleware("http")
+async def add_no_cache_headers(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path == "/" or request.url.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 def _get_flow(orchestrator: str):

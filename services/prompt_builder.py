@@ -58,7 +58,7 @@ def build_grading_messages(
                 f"Rubric ID: {rubric_id}\n"
                 f"Rubric JSON: {rubric_compact}\n\n"
                 "Return a JSON object with fields: \n"
-                "criteria: [{criterion_id, score (1-4 int), label, evidence_quotes (0-2), justification (2-4 sentences)}],\n"
+                "criteria: [{criterion_id, criterion_name, category_id, category_name, score (1-4 int), label, evidence_quotes (0-2), justification (2-4 sentences)}],\n"
                 "summary_strengths (2-4 bullets), priority_revisions (2-4 bullets), confidence (0-100).\n"
                 "Calibrate strictness against the provided examples while grading only the current document.\n"
                 f"Additional grader instruction: {instruction}\n\n"
