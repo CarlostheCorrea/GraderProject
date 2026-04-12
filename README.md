@@ -94,7 +94,7 @@ uvicorn main:app
 
 Provided are example essays in different formats that can be used in the project.
 
-[Essays](https://github.com/CarlostheCorrea/GenAI/tree/main/GraderProject/ExampleEssays)
+[Essays](https://github.com/CarlostheCorrea/GraderProject/tree/main/ExampleEssays)
 
 ## API Endpoints
 
