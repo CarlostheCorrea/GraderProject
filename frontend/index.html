@@ -54,6 +54,17 @@
       </section>
 
       <section class="card">
+        <h2>Fact Check <span class="section-badge">Web Search</span></h2>
+        <p class="section-description">Extracts verifiable claims from the essay, searches live web sources, and returns a verdict with a link to each source.</p>
+        <form id="factcheck-form" class="form-grid">
+          <div class="full">
+            <button type="submit">Run Fact Check</button>
+          </div>
+        </form>
+        <div id="factcheck-result" class="result-container"></div>
+      </section>
+
+      <section class="card">
         <h2>Grade</h2>
         <form id="grade-form" class="form-grid">
           <label class="full">
@@ -68,7 +79,7 @@
 
           <button type="submit">Run Grading</button>
         </form>
-        <pre id="grade-result" class="result"></pre>
+        <div id="grade-result" class="result-container"></div>
       </section>
 
       <section class="card">
@@ -81,7 +92,7 @@
 
           <button type="submit">Generate Edits</button>
         </form>
-        <pre id="edit-result" class="result"></pre>
+        <div id="edit-result" class="result-container"></div>
       </section>
 
       <section class="card">
@@ -94,7 +105,7 @@
 
           <button type="submit">Ask</button>
         </form>
-        <pre id="ask-result" class="result"></pre>
+        <div id="ask-result" class="result-container"></div>
       </section>
 
       <section id="toast" class="toast" aria-live="polite"></section>

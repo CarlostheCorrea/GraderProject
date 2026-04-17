@@ -87,3 +87,15 @@ class FollowUpResponse(BaseModel):
     answer: str
     citations: List[str] = Field(default_factory=list)
     consistency_note: str
+
+
+class FactCheckClaim(BaseModel):
+    claim: str
+    verdict: Literal["Supported", "Contradicted", "Unverifiable"]
+    explanation: str
+    source_title: str = ""
+    source_url: str = ""
+
+
+class FactCheckOutput(BaseModel):
+    claims: List[FactCheckClaim]

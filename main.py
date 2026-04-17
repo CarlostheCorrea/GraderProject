@@ -17,11 +17,13 @@ from schemas import (
     CreateSessionResponse,
     EditRequest,
     ExtractDocumentResponse,
+    FactCheckOutput,
     GradeRequest,
     RubricInfo,
 )
 from services.document_extractor import SUPPORTED_EXTENSIONS, extract_text_from_file
 from services.calibration_loader import load_calibration_examples, pick_calibration_anchors
+from services.fact_checker import FactChecker
 from services.llm_client import LLMClient
 from services.model_router import estimate_tokens
 from services.rubric_loader import RubricLoader
@@ -41,6 +43,7 @@ session_store = InMemorySessionStore()
 llm_client: LLMClient | None = None
 langgraph_flow: LangGraphFlow | None = None
 pydanticai_flow: PydanticAIFlow | None = None
+fact_checker: FactChecker | None = None
 
 
 @app.middleware("http")
@@ -65,7 +68,7 @@ def _get_flow(orchestrator: str):
 
 @app.on_event("startup")
 def startup() -> None:
-    global rubrics, calibration_bank, llm_client, langgraph_flow, pydanticai_flow
+    global rubrics, calibration_bank, llm_client, langgraph_flow, pydanticai_flow, fact_checker
     loader = RubricLoader(Path(__file__).parent / "FileJson")
     rubrics = loader.load_all()
     calibration_bank = load_calibration_examples(Path(__file__).parent / "SampleEssays")
@@ -73,6 +76,7 @@ def startup() -> None:
     llm_client = LLMClient()
     langgraph_flow = LangGraphFlow(llm_client)
     pydanticai_flow = PydanticAIFlow(llm_client)
+    fact_checker = FactChecker()
 
 
 @app.get("/rubrics", response_model=list[RubricInfo])
@@ -247,5 +251,21 @@ def ask_session(session_id: str, req: AskRequest):
 
     session.conversation.append({"role": "user", "content": req.question})
     session.conversation.append({"role": "assistant", "content": str(result)})
+    session_store.update(session)
+    return result
+
+
+@app.post("/sessions/{session_id}/factcheck", response_model=FactCheckOutput)
+def factcheck_session(session_id: str):
+    session = session_store.get(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if fact_checker is None:
+        raise HTTPException(status_code=500, detail="Fact checker not initialized")
+
+    logger.info("Request received. type=factcheck session_id=%s doc_chars=%s", session_id, len(session.document_text))
+
+    result = fact_checker.check(session.document_text)
+    session.conversation.append({"role": "assistant", "content": f"Fact-check complete. {len(result.get('claims', []))} claims checked."})
     session_store.update(session)
     return result

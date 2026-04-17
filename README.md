@@ -5,6 +5,7 @@ Rubric Grader is a local FastAPI app with a built-in web UI for:
 - rubric-based grading
 - grammar/clarity edit suggestions
 - follow-up Q&A on grading results
+- live fact-checking against real web sources (powered by OpenAI web search)
 
 ## Requirements
 
@@ -79,6 +80,7 @@ uvicorn main:app --host 127.0.0.1 --port 8017
 <img width="1246" height="822" alt="Screenshot1" src="https://github.com/user-attachments/assets/6ff5d8c0-e66e-4928-9cd9-ddea87376241" />
    
 4. Use one of the actions:
+   - `Run Fact Check` to extract verifiable factual claims from the essay, search live web sources via OpenAI web search, and return a verdict (Supported / Contradicted / Unverifiable) with a clickable link to each source.
    - `Run Grading` to score the paper against the rubric and return criterion-level scores, evidence quotes, and an overall letter grade.
    
 <img width="1346" height="589" alt="Screenshot2" src="https://github.com/user-attachments/assets/14a30501-9df6-4b94-932c-aa05fa46326f" />
@@ -104,6 +106,7 @@ Provided are example essays in different formats that can be used in the project
 - `GET /health`
 - `POST /documents/extract` (multipart upload: `.pdf`, `.txt`, `.docx`)
 - `POST /sessions`
+- `POST /sessions/{session_id}/factcheck`
 - `POST /sessions/{session_id}/grade`
 - `POST /sessions/{session_id}/edit`
 - `POST /sessions/{session_id}/ask`
@@ -120,6 +123,7 @@ Provided are example essays in different formats that can be used in the project
 - Sessions are stored in memory; restarting the app clears sessions.
 - Calibration examples are loaded from `SampleEssays/` per rubric and used as internal scoring anchors.
 - The system does not request or return chain-of-thought.
+- Fact-checking uses the OpenAI Responses API (`gpt-4o` + `web_search_preview` tool) and deducts from your existing OpenAI API credit — no additional API key or third-party account required. Web search queries cost slightly more than standard completions (~$25/1,000 queries).
 
 ## Project Features
 
@@ -163,6 +167,7 @@ Provided are example essays in different formats that can be used in the project
   - `scoring.py`: deterministic backend score/letter computation.
   - `model_router.py`: model selection logic (e.g., `gpt-4o` vs `gpt-4o-mini`).
   - `session_store.py`: in-memory session storage.
+  - `fact_checker.py`: live fact-checking via OpenAI Responses API with web search tool.
 - `orchestrators/`:
   - `pydanticai_flow.py`: default grading/edit/Q&A flow with type-safe output validation and repair fallback.
   - `langgraph_flow.py`: state-machine alternative flow.
@@ -182,13 +187,16 @@ Provided are example essays in different formats that can be used in the project
    - Normalize evidence fields.
    - Validate output against `TaskAGradingOutput`; if invalid, run repair call.
    - Compute deterministic overall/category/letter scores in backend.
-4. Edit (`POST /sessions/{id}/edit`):
+4. Fact Check (`POST /sessions/{id}/factcheck`):
+   - Call OpenAI Responses API with `web_search_preview` tool using the existing `OPENAI_API_KEY`.
+   - Model identifies up to 6 verifiable claims, searches the web for each, and returns structured verdicts with source URLs.
+5. Edit (`POST /sessions/{id}/edit`):
    - Build edit prompt and return structured grammar/clarity edits.
-5. Follow-up Q&A (`POST /sessions/{id}/ask`):
+6. Follow-up Q&A (`POST /sessions/{id}/ask`):
    - Build follow-up prompt with document + rubric + prior grading result.
    - Validate response schema and enforce output constraints (e.g., requested sentence count).
-6. Frontend display:
-   - Render structured results for grading, edits, and Q&A.
+7. Frontend display:
+   - Render structured results for fact-checking, grading, edits, and Q&A.
 - `Could not build wheels for grpcio` / `Could not find <Python.h>`:
   - Delete and recreate the virtual environment, then reinstall:
   - `rm -rf .venv && python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`
