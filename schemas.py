@@ -20,6 +20,7 @@ class CreateSessionRequest(BaseModel):
     document_text: str = Field(min_length=1)
     rubric_id: str
     orchestrator: OrchestratorType = "pydanticai"
+    custom_rubric_json: Optional[Dict] = None
 
 
 class CreateSessionResponse(BaseModel):
@@ -89,6 +90,16 @@ class FollowUpResponse(BaseModel):
     consistency_note: str
 
 
+class RewriteRequest(BaseModel):
+    pass
+
+
+class RewriteOutput(BaseModel):
+    rewritten_essay: str
+    changes_made: List[str] = Field(default_factory=list)
+    criteria_addressed: List[str] = Field(default_factory=list)
+
+
 class FactCheckClaim(BaseModel):
     claim: str
     verdict: Literal["Supported", "Contradicted", "Unverifiable"]
@@ -99,3 +110,11 @@ class FactCheckClaim(BaseModel):
 
 class FactCheckOutput(BaseModel):
     claims: List[FactCheckClaim]
+
+
+class BuildRubricRequest(BaseModel):
+    description: str = Field(min_length=10)
+
+
+class ImportRubricRequest(BaseModel):
+    rubric_text: str = Field(min_length=10)

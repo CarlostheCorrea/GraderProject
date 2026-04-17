@@ -126,6 +126,94 @@ def build_followup_messages(
     ]
 
 
+def build_rewrite_messages(
+    document_text: str,
+    weak_criteria: list,
+) -> List[dict]:
+    criteria_block = "\n".join(
+        f"- {c['criterion_name']} (score {c['score']}/4): {c['justification']}"
+        for c in weak_criteria
+    )
+    return [
+        {
+            "role": "system",
+            "content": (
+                "You are a writing coach. Rewrite the student's full essay to address all the "
+                "listed weak criteria in a single pass — this avoids conflicting edits across sections. "
+                "Rules:\n"
+                "1. Preserve the student's voice, topic, and core argument.\n"
+                "2. Only improve the aspects the weak criteria require.\n"
+                "3. Keep the same overall length (within 15%).\n"
+                "Return JSON only with these exact fields:\n"
+                "- rewritten_essay: the full improved essay as a single string\n"
+                "- changes_made: list of 2-5 specific changes made and why\n"
+                "- criteria_addressed: list of criterion names that were improved"
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Weak criteria to address:\n{criteria_block}\n\n"
+                f"Original essay:\n{document_text[:7000]}\n\n"
+                "Rewrite the full essay to improve all listed criteria. "
+                "Return JSON with rewritten_essay, changes_made, and criteria_addressed."
+            ),
+        },
+    ]
+
+
+def build_rubric_from_description_messages(description: str, schema_hint: str) -> List[dict]:
+    return [
+        {
+            "role": "system",
+            "content": (
+                "You are a rubric design expert. Generate a complete, well-structured grading rubric from a user description. "
+                "Rules:\n"
+                "1. Create 3-5 categories, each with 2-4 criteria.\n"
+                "2. Category weights must sum to exactly 1.0.\n"
+                "3. Each criterion must have anchors for scores 1, 2, 3, and 4 — write specific, observable behavior for each.\n"
+                "4. rubric_id must be a lowercase slug ending in _v1 (e.g. persuasive_essay_v1).\n"
+                "5. short_title must be under 30 characters.\n"
+                "Return JSON only matching the schema exactly."
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Generate a rubric based on this description:\n{description}\n\n"
+                f"Use exactly this JSON schema:\n{schema_hint}"
+            ),
+        },
+    ]
+
+
+def build_rubric_from_import_messages(rubric_text: str, schema_hint: str) -> List[dict]:
+    return [
+        {
+            "role": "system",
+            "content": (
+                "You are a rubric conversion expert. Convert any rubric format (plain text, table, bullet points, etc.) "
+                "to the required JSON schema exactly. "
+                "Rules:\n"
+                "1. Preserve the original categories and criteria as closely as possible.\n"
+                "2. Map any scoring scale to 1-4. If original uses letters (A-D) or percentages, convert proportionally.\n"
+                "3. Category weights must sum to exactly 1.0. Distribute evenly if weights are not specified.\n"
+                "4. rubric_id must be a lowercase slug ending in _v1.\n"
+                "5. short_title must be under 30 characters.\n"
+                "6. If anchor text is missing for a score level, infer reasonable descriptions from context.\n"
+                "Return JSON only matching the schema exactly."
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Convert this rubric to JSON:\n\n{rubric_text[:8000]}\n\n"
+                f"Use exactly this JSON schema:\n{schema_hint}"
+            ),
+        },
+    ]
+
+
 def build_fix_json_messages(schema_name: str, raw_payload: str, validation_error: str) -> List[dict]:
     return [
         {

@@ -13,17 +13,23 @@ from orchestrators.langgraph_flow import LangGraphFlow
 from orchestrators.pydanticai_flow import PydanticAIFlow
 from schemas import (
     AskRequest,
+    BuildRubricRequest,
     CreateSessionRequest,
     CreateSessionResponse,
     EditRequest,
     ExtractDocumentResponse,
     FactCheckOutput,
     GradeRequest,
+    ImportRubricRequest,
+    RewriteOutput,
+    RewriteRequest,
     RubricInfo,
 )
 from services.document_extractor import SUPPORTED_EXTENSIONS, extract_text_from_file
 from services.calibration_loader import load_calibration_examples, pick_calibration_anchors
 from services.fact_checker import FactChecker
+from services.rewriter import Rewriter
+from services.rubric_builder import RubricBuilder
 from services.llm_client import LLMClient
 from services.model_router import estimate_tokens
 from services.rubric_loader import RubricLoader
@@ -44,6 +50,8 @@ llm_client: LLMClient | None = None
 langgraph_flow: LangGraphFlow | None = None
 pydanticai_flow: PydanticAIFlow | None = None
 fact_checker: FactChecker | None = None
+rewriter: Rewriter | None = None
+rubric_builder: RubricBuilder | None = None
 
 
 @app.middleware("http")
@@ -68,7 +76,7 @@ def _get_flow(orchestrator: str):
 
 @app.on_event("startup")
 def startup() -> None:
-    global rubrics, calibration_bank, llm_client, langgraph_flow, pydanticai_flow, fact_checker
+    global rubrics, calibration_bank, llm_client, langgraph_flow, pydanticai_flow, fact_checker, rewriter, rubric_builder
     loader = RubricLoader(Path(__file__).parent / "FileJson")
     rubrics = loader.load_all()
     calibration_bank = load_calibration_examples(Path(__file__).parent / "SampleEssays")
@@ -77,6 +85,8 @@ def startup() -> None:
     langgraph_flow = LangGraphFlow(llm_client)
     pydanticai_flow = PydanticAIFlow(llm_client)
     fact_checker = FactChecker()
+    rewriter = Rewriter(llm_client)
+    rubric_builder = RubricBuilder(llm_client)
 
 
 @app.get("/rubrics", response_model=list[RubricInfo])
@@ -126,22 +136,29 @@ app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
 @app.post("/sessions", response_model=CreateSessionResponse)
 def create_session(req: CreateSessionRequest) -> CreateSessionResponse:
-    rubric_json = rubrics.get(req.rubric_id)
-    if not rubric_json:
-        raise HTTPException(status_code=404, detail="Unknown rubric_id")
+    if req.custom_rubric_json is not None:
+        rubric_json = req.custom_rubric_json
+        rubric_id = (rubric_json.get("rubric_id") if isinstance(rubric_json, dict) else None) or req.rubric_id
+        if not rubric_json:
+            raise HTTPException(status_code=400, detail="custom_rubric_json is empty — generate or import a rubric first")
+    else:
+        rubric_json = rubrics.get(req.rubric_id)
+        rubric_id = req.rubric_id
+        if not rubric_json:
+            raise HTTPException(status_code=404, detail="Unknown rubric_id")
 
     chars = len(req.document_text)
     est_toks = estimate_tokens(req.document_text)
     logger.info(
         "Request received. type=create_session session_id=%s rubric_id=%s doc_chars=%s est_tokens=%s orchestrator=%s",
         None,
-        req.rubric_id,
+        rubric_id,
         chars,
         est_toks,
         req.orchestrator,
     )
 
-    session = session_store.create(req.document_text, req.rubric_id, rubric_json)
+    session = session_store.create(req.document_text, rubric_id, rubric_json)
     return CreateSessionResponse(session_id=session.session_id)
 
 
@@ -152,7 +169,9 @@ def grade_session(session_id: str, req: GradeRequest):
         raise HTTPException(status_code=404, detail="Session not found")
 
     rubric_id = req.rubric_id or session.rubric_id
-    rubric_json = rubrics.get(rubric_id)
+    rubric_json = rubrics.get(rubric_id) if rubric_id in rubrics else None
+    if rubric_json is None:
+        rubric_json = session.rubric_json
     if not rubric_json:
         raise HTTPException(status_code=404, detail="Unknown rubric_id")
 
@@ -255,6 +274,56 @@ def ask_session(session_id: str, req: AskRequest):
     return result
 
 
+@app.post("/sessions/{session_id}/rewrite", response_model=RewriteOutput)
+def rewrite_essay(session_id: str):
+    session = session_store.get(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if not session.grading_result:
+        raise HTTPException(status_code=400, detail="Grade the session first before rewriting")
+    if rewriter is None:
+        raise HTTPException(status_code=500, detail="Rewriter not initialized")
+
+    all_criteria = session.grading_result.get("criteria", [])
+    weak_criteria = [
+        {
+            "criterion_name": c.get("criterion_name", c.get("criterion_id", "")),
+            "score": c.get("score", 1),
+            "justification": c.get("justification", ""),
+        }
+        for c in all_criteria
+        if c.get("score", 4) < 4
+    ]
+
+    if not weak_criteria:
+        weak_criteria = [
+            {
+                "criterion_name": c.get("criterion_name", c.get("criterion_id", "")),
+                "score": c.get("score", 4),
+                "justification": c.get("justification", ""),
+            }
+            for c in all_criteria
+        ]
+
+    logger.info(
+        "Request received. type=rewrite session_id=%s weak_criteria=%s",
+        session_id,
+        len(weak_criteria),
+    )
+
+    result = rewriter.rewrite(
+        document_text=session.document_text,
+        weak_criteria=weak_criteria,
+    )
+
+    session.conversation.append({
+        "role": "assistant",
+        "content": f"Full essay rewrite complete. Addressed {len(weak_criteria)} criteria.",
+    })
+    session_store.update(session)
+    return result
+
+
 @app.post("/sessions/{session_id}/factcheck", response_model=FactCheckOutput)
 def factcheck_session(session_id: str):
     session = session_store.get(session_id)
@@ -269,3 +338,23 @@ def factcheck_session(session_id: str):
     session.conversation.append({"role": "assistant", "content": f"Fact-check complete. {len(result.get('claims', []))} claims checked."})
     session_store.update(session)
     return result
+
+
+@app.post("/rubrics/build")
+def build_rubric(req: BuildRubricRequest):
+    if rubric_builder is None:
+        raise HTTPException(status_code=500, detail="Rubric builder not initialized")
+    logger.info("Request received. type=build_rubric desc_chars=%s", len(req.description))
+    result = rubric_builder.generate_from_description(req.description)
+    return result
+
+
+@app.post("/rubrics/import")
+def import_rubric(req: ImportRubricRequest):
+    if rubric_builder is None:
+        raise HTTPException(status_code=500, detail="Rubric builder not initialized")
+    logger.info("Request received. type=import_rubric text_chars=%s", len(req.rubric_text))
+    result = rubric_builder.generate_from_import(req.rubric_text)
+    return result
+
+

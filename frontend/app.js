@@ -1,6 +1,7 @@
 const state = {
   sessionId: null,
   rubricsById: {},
+  customRubric: null,
 };
 const DEFAULT_ORCHESTRATOR = "pydanticai";
 
@@ -168,7 +169,12 @@ function formatGradeResult(data) {
         <ul class="result-list">${revisionItems}</ul>
       </div>
     </div>
-    ${criteriaHtml ? `<h4 class="section-label section-label-muted criteria-heading">Criteria Breakdown</h4><div class="criteria-list">${criteriaHtml}</div>` : ""}`;
+    ${criteriaHtml ? `<h4 class="section-label section-label-muted criteria-heading">Criteria Breakdown</h4><div class="criteria-list">${criteriaHtml}</div>` : ""}
+    <div class="rewrite-action-row">
+      <button class="rewrite-btn" id="rewrite-essay-btn">✎ Rewrite Essay</button>
+      <span class="rewrite-action-hint">Rewrites the full essay in one pass, addressing all weak criteria</span>
+    </div>
+    <div id="rewrite-essay-panel" class="rewrite-panel" style="display:none;"></div>`;
 }
 
 function formatEditResult(data) {
@@ -278,12 +284,21 @@ function updateRubricSummary() {
 
 els.createForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (!els.docText.value.trim()) {
+    notify("Paste or upload document text first.", true);
+    return;
+  }
+  if (!els.rubricSelect.value) {
+    notify("Select a rubric first.", true);
+    return;
+  }
   setLoading(els.createForm, true);
   try {
     const payload = {
       document_text: els.docText.value.trim(),
-      rubric_id: els.rubricSelect.value,
+      rubric_id: state.customRubric ? (state.customRubric.rubric_id || "custom") : els.rubricSelect.value,
       orchestrator: selectedOrchestrator(),
+      ...(state.customRubric ? { custom_rubric_json: state.customRubric } : {}),
     };
     const result = await api("/sessions", {
       method: "POST",
@@ -402,6 +417,46 @@ function formatFactCheckResult(data) {
   return `<div class="factcheck-list">${cardsHtml}</div>`;
 }
 
+function renderRewriteResult(panel, data) {
+  const changes = Array.isArray(data.changes_made) ? data.changes_made : [];
+  const addressed = Array.isArray(data.criteria_addressed) ? data.criteria_addressed : [];
+  const changesHtml = changes
+    .map((c) => `<div class="rewrite-change-item">${esc(c)}</div>`)
+    .join("");
+  const addressedHtml = addressed
+    .map((c) => `<span class="pill pill-green">${esc(c)}</span>`)
+    .join(" ");
+
+  panel.innerHTML = `
+    <p class="rewrite-panel-label">Rewrite Coach</p>
+    ${addressedHtml ? `<div class="pill-list" style="margin-bottom:0.75rem;">${addressedHtml}</div>` : ""}
+    <div class="rewrite-col-label rewrite-col-label-rewritten" style="margin-bottom:0.35rem;">Rewritten Essay</div>
+    <div class="rewrite-rewritten rewrite-essay-body">${esc(data.rewritten_essay || "")}</div>
+    ${changesHtml ? `<div class="rewrite-changes" style="margin-top:0.75rem;"><h4>Changes Made</h4>${changesHtml}</div>` : ""}`;
+  panel.style.display = "block";
+}
+
+els.gradeResult.addEventListener("click", async (event) => {
+  const btn = event.target.closest("#rewrite-essay-btn");
+  if (!btn) return;
+
+  const panel = document.getElementById("rewrite-essay-panel");
+  btn.disabled = true;
+  btn.textContent = "Rewriting…";
+  try {
+    requireSession();
+    const result = await api(`/sessions/${state.sessionId}/rewrite`, { method: "POST" });
+    renderRewriteResult(panel, result);
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    notify("Rewrite ready.");
+  } catch (error) {
+    notify(error.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "✎ Rewrite Essay";
+  }
+});
+
 els.factcheckForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   setLoading(els.factcheckForm, true);
@@ -415,6 +470,124 @@ els.factcheckForm.addEventListener("submit", async (event) => {
   } finally {
     setLoading(els.factcheckForm, false);
   }
+});
+
+// ── Rubric Builder ──────────────────────────────────────────────────────────
+
+const rbState = { generatedRubric: null };
+
+const rbEls = {
+  tabs: document.querySelectorAll("#rb-tabs .rb-tab"),
+  describePanel: document.getElementById("rb-describe-panel"),
+  importPanel: document.getElementById("rb-import-panel"),
+  descriptionInput: document.getElementById("rb-description"),
+  importTextInput: document.getElementById("rb-import-text"),
+  buildBtn: document.getElementById("rb-build-btn"),
+  importBtn: document.getElementById("rb-import-btn"),
+  preview: document.getElementById("rb-preview"),
+  previewName: document.getElementById("rb-preview-name"),
+  previewId: document.getElementById("rb-preview-id"),
+  jsonPre: document.getElementById("rb-json-pre"),
+  saveBtn: document.getElementById("rb-save-btn"),
+};
+
+document.getElementById("setup-tabs").addEventListener("click", (e) => {
+  const tab = e.target.closest(".rb-tab");
+  if (!tab) return;
+  const panel = tab.dataset.panel;
+  document.querySelectorAll("#setup-tabs .rb-tab").forEach((t) =>
+    t.classList.toggle("rb-tab-active", t.dataset.panel === panel)
+  );
+  document.getElementById("setup-session-panel").style.display = panel === "session" ? "" : "none";
+  document.getElementById("setup-builder-panel").style.display = panel === "builder" ? "" : "none";
+});
+
+document.getElementById("rb-tabs").addEventListener("click", (e) => {
+  const tab = e.target.closest(".rb-tab");
+  if (!tab) return;
+  const mode = tab.dataset.mode;
+  rbEls.tabs.forEach((t) => t.classList.toggle("rb-tab-active", t.dataset.mode === mode));
+  rbEls.describePanel.style.display = mode === "describe" ? "" : "none";
+  rbEls.importPanel.style.display = mode === "import" ? "" : "none";
+});
+
+function showRubricPreview(data) {
+  rbState.generatedRubric = data;
+  rbEls.previewName.textContent = data.name || data.rubric_id || "Untitled Rubric";
+  rbEls.previewId.textContent = data.rubric_id || "";
+  rbEls.jsonPre.textContent = JSON.stringify(data, null, 2);
+  rbEls.preview.style.display = "";
+}
+
+rbEls.buildBtn.addEventListener("click", async () => {
+  const description = rbEls.descriptionInput.value.trim();
+  if (!description) { notify("Enter a rubric description first.", true); return; }
+  rbEls.buildBtn.disabled = true;
+  rbEls.buildBtn.textContent = "Generating…";
+  try {
+    const result = await api("/rubrics/build", {
+      method: "POST",
+      body: JSON.stringify({ description }),
+    });
+    showRubricPreview(result);
+    notify("Rubric generated.");
+  } catch (error) {
+    notify(error.message, true);
+  } finally {
+    rbEls.buildBtn.disabled = false;
+    rbEls.buildBtn.textContent = "Generate Rubric";
+  }
+});
+
+rbEls.importBtn.addEventListener("click", async () => {
+  const rubric_text = rbEls.importTextInput.value.trim();
+  if (!rubric_text) { notify("Paste rubric content first.", true); return; }
+  rbEls.importBtn.disabled = true;
+  rbEls.importBtn.textContent = "Converting…";
+  try {
+    const result = await api("/rubrics/import", {
+      method: "POST",
+      body: JSON.stringify({ rubric_text }),
+    });
+    showRubricPreview(result);
+    notify("Rubric converted.");
+  } catch (error) {
+    notify(error.message, true);
+  } finally {
+    rbEls.importBtn.disabled = false;
+    rbEls.importBtn.textContent = "Convert to JSON";
+  }
+});
+
+rbEls.saveBtn.addEventListener("click", () => {
+  if (!rbState.generatedRubric) return;
+  // Store the custom rubric in state for use when creating a session
+  state.customRubric = rbState.generatedRubric;
+  const name = rbState.generatedRubric.name || rbState.generatedRubric.rubric_id || "Custom Rubric";
+  // Switch back to Session Setup tab
+  document.querySelectorAll("#setup-tabs .rb-tab").forEach((t) =>
+    t.classList.toggle("rb-tab-active", t.dataset.panel === "session")
+  );
+  document.getElementById("setup-session-panel").style.display = "";
+  document.getElementById("setup-builder-panel").style.display = "none";
+  // Show active custom rubric pill in the rubric picker area
+  let pill = document.getElementById("custom-rubric-pill");
+  if (!pill) {
+    pill = document.createElement("div");
+    pill.id = "custom-rubric-pill";
+    pill.className = "custom-rubric-pill";
+    document.getElementById("setup-session-panel").appendChild(pill);
+  }
+  pill.innerHTML = `
+    <span class="custom-rubric-pill-label">Custom rubric active:</span>
+    <span class="custom-rubric-pill-name">${esc(name)}</span>
+    <button class="custom-rubric-clear" id="custom-rubric-clear" type="button">✕ Clear</button>`;
+  document.getElementById("custom-rubric-clear").addEventListener("click", () => {
+    state.customRubric = null;
+    pill.remove();
+    notify("Custom rubric cleared. Using selected rubric.");
+  });
+  notify(`Custom rubric "${name}" ready — create a session to use it.`);
 });
 
 loadRubrics().catch((error) => {

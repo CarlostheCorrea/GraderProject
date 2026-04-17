@@ -23,33 +23,95 @@
         </p>
       </section>
 
-      <section class="card">
+      <section class="card" id="setup-card">
         <h2>Session Setup</h2>
-        <form id="create-form" class="form-grid">
-          <label>
-            Rubric
-            <select id="rubric-select" required></select>
-          </label>
-          <p id="rubric-summary" class="rubric-summary full"></p>
 
-          <label class="full">
-            Document Text
-            <textarea id="document-text" placeholder="Paste student writing here..." required></textarea>
-          </label>
+        <div class="rb-tabs" id="setup-tabs">
+          <button class="rb-tab rb-tab-active" data-panel="session">Session Setup</button>
+          <button class="rb-tab" data-panel="builder">Rubric Builder <span class="section-badge">Custom</span></button>
+        </div>
 
-          <label class="full">
-            Upload Document (.pdf, .txt, .docx)
-            <input id="document-file" type="file" accept=".pdf,.txt,.docx,.doc" />
-          </label>
+        <!-- Rubric selection — switches between picker and builder -->
+        <div id="setup-session-panel">
+          <div class="form-grid">
+            <label>
+              Rubric
+              <select id="rubric-select"></select>
+            </label>
+            <p id="rubric-summary" class="rubric-summary full"></p>
+          </div>
+        </div>
 
-          <button id="upload-document-btn" type="button">Extract Text From File</button>
+        <!-- Rubric Builder Panel -->
+        <div id="setup-builder-panel" style="display:none;">
+          <p class="section-description">Generate a new rubric from a description, or convert an existing rubric to JSON.</p>
+          <div class="rb-warning">
+            <span class="rb-warning-icon">⚠</span>
+            Custom rubrics have no calibration essays, which reduces scoring consistency compared to built-in rubrics.
+          </div>
 
-          <button type="submit">Create Session</button>
-        </form>
+          <div class="rb-tabs" id="rb-tabs">
+            <button class="rb-tab rb-tab-active" data-mode="describe">Describe Idea</button>
+            <button class="rb-tab" data-mode="import">Import Existing</button>
+          </div>
 
-        <div class="status-line">
-          <span>Session ID:</span>
-          <code id="session-id">Not created</code>
+          <div id="rb-describe-panel" class="rb-panel">
+            <label>
+              Describe Your Rubric
+              <textarea id="rb-description" placeholder="e.g., A rubric for grading persuasive essays in a high school English class. Focus on claim strength, evidence quality, counterargument, and writing clarity." style="min-height:120px;"></textarea>
+            </label>
+            <div style="margin-top:0.75rem;">
+              <button id="rb-build-btn" type="button">Generate Rubric</button>
+            </div>
+          </div>
+
+          <div id="rb-import-panel" class="rb-panel" style="display:none;">
+            <label>
+              Paste Existing Rubric
+              <textarea id="rb-import-text" placeholder="Paste your rubric here in any format — plain text, table, bullet points, Word copy-paste, etc." style="min-height:120px;"></textarea>
+            </label>
+            <div style="margin-top:0.75rem;">
+              <button id="rb-import-btn" type="button">Convert to JSON</button>
+            </div>
+          </div>
+
+          <div id="rb-preview" class="rb-preview" style="display:none;">
+            <div class="rb-preview-header">
+              <span class="rb-preview-name" id="rb-preview-name"></span>
+              <span class="rb-preview-id" id="rb-preview-id"></span>
+            </div>
+            <details class="rb-json-details">
+              <summary>View Raw JSON</summary>
+              <pre class="rb-json-pre" id="rb-json-pre"></pre>
+            </details>
+            <div style="margin-top:0.85rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+              <button id="rb-save-btn" type="button">Save &amp; Use This Rubric</button>
+              <span class="rewrite-action-hint">Uses this rubric for the current session only — not saved permanently</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Always visible: document input and session creation -->
+        <div class="setup-doc-section">
+          <form id="create-form" class="form-grid">
+            <label class="full">
+              Document Text
+              <textarea id="document-text" placeholder="Paste student writing here..."></textarea>
+            </label>
+
+            <label class="full">
+              Upload Document (.pdf, .txt, .docx)
+              <input id="document-file" type="file" accept=".pdf,.txt,.docx,.doc" />
+            </label>
+
+            <button id="upload-document-btn" type="button">Extract Text From File</button>
+            <button type="submit">Create Session</button>
+          </form>
+
+          <div class="status-line">
+            <span>Session ID:</span>
+            <code id="session-id">Not created</code>
+          </div>
         </div>
       </section>
 
@@ -111,6 +173,6 @@
       <section id="toast" class="toast" aria-live="polite"></section>
     </main>
 
-    <script src="/static/app.js?v=20260412-criteria-display"></script>
+    <script src="/static/app.js?v=20260416-rubric-builder"></script>
   </body>
 </html>
