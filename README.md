@@ -64,35 +64,33 @@ uvicorn main:app --host 127.0.0.1 --port 8017
 
 ## Frontend Workflow
 
-1. Choose a rubric.
-2. Paste text or upload `.pdf`, `.txt`, or `.docx` and click `Extract Text From File`.
+1. Choose a built-in rubric, or create a temporary custom rubric with the Rubric Builder.
+2. Paste text or upload `.pdf`, `.txt`, `.docx`, or `.doc` and click `Extract Text From File`.
 3. Click `Create Session`.
-4. Run grading, edits, or follow-up Q&A.
+4. Run fact-checking, grading, edits, or follow-up Q&A.
+5. After grading, optionally use `Rewrite Essay` to rewrite the full essay around weak rubric criteria.
 
 ## How To Use The App
 
-1. In `Session Setup`, add your document:
+1. Start the server and open [http://127.0.0.1:8017](http://127.0.0.1:8017).
+2. In `Session Setup`, choose the rubric:
+   - Use the `Session Setup` tab to select a built-in rubric.
+   - Use `Rubric Builder` to generate a custom rubric from a description or convert an existing pasted rubric to JSON.
+   - Click `Save & Use This Rubric` if you create a custom rubric. Custom rubrics are temporary for the current session and do not have calibration essays.
+3. Add the document:
    - Paste text directly into `Document Text`, or
-   - Upload a `.txt`, `.pdf`, or `.docx` file and click `Extract Text From File`.
-2. Pick the rubric that best matches your assignment.
-3. Click `Create Session`.
-   
-<img width="1246" height="822" alt="Screenshot1" src="https://github.com/user-attachments/assets/6ff5d8c0-e66e-4928-9cd9-ddea87376241" />
-   
-4. Use one of the actions:
-   - `Run Fact Check` to extract verifiable factual claims from the essay, search live web sources via OpenAI web search, and return a verdict (Supported / Contradicted / Unverifiable) with a clickable link to each source.
-   - `Run Grading` to score the paper against the rubric and return criterion-level scores, evidence quotes, and an overall letter grade.
-   
-<img width="1346" height="589" alt="Screenshot2" src="https://github.com/user-attachments/assets/14a30501-9df6-4b94-932c-aa05fa46326f" />
-
-   - `Generate Edits` for grammar/clarity suggestions and practical rewrite recommendations you can apply directly.
-
-<img width="1291" height="583" alt="Screenshot3" src="https://github.com/user-attachments/assets/9794302f-4642-48e7-83b6-2efe22ccdce4" />
-
-   - `Ask` in `Follow-up Q&A` to ask questions about the paper or grading, such as summaries, missing evidence, or revision priorities.
-
-<img width="1320" height="499" alt="Screenshot4" src="https://github.com/user-attachments/assets/0718a4ee-5bb7-47b5-8e1e-080e62ecf425" />
-
+   - Upload a `.txt`, `.pdf`, `.docx`, or `.doc` file and click `Extract Text From File`.
+4. Click `Create Session`. The app stores the selected rubric and document text in memory.
+5. Optional: click `Run Fact Check` to extract verifiable claims, search live web sources through OpenAI web search, and return verdicts with source links.
+6. Click `Run Grading` to score the paper against the selected rubric. The result includes:
+   - Overall score and letter grade.
+   - Summary strengths and priority revisions.
+   - A named criteria breakdown using actual criterion names and category names rather than only codes like `A1` or `B1`.
+   - Evidence quotes and rubric-anchored justifications.
+7. After grading, use `Rewrite Essay` if you want the app to rewrite the full essay around the weakest criteria.
+8. Use `Generate Edits` for grammar and clarity suggestions.
+9. Use `Ask` in `Follow-up Q&A` to ask questions about the document, rubric, grading result, or revision priorities.
+10. Restarting the app clears in-memory sessions and temporary custom rubrics.
 
 ## Example Essays
 
