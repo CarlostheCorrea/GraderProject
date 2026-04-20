@@ -75,22 +75,28 @@ uvicorn main:app --host 127.0.0.1 --port 8017
 1. Start the server and open [http://127.0.0.1:8017](http://127.0.0.1:8017).
 2. In `Session Setup`, choose the rubric:
    - Use the `Session Setup` tab to select a built-in rubric.
+<img width="1444" height="725" alt="Screenshot 2026-04-20 at 2 33 48 PM" src="https://github.com/user-attachments/assets/18d24ae8-8be7-4558-80fc-bcc05d2c15a6" />
    - Use `Rubric Builder` to generate a custom rubric from a description or convert an existing pasted rubric to JSON.
+<img width="1132" height="651" alt="Screenshot 2026-04-20 at 2 35 06 PM" src="https://github.com/user-attachments/assets/6e7935b6-dc10-4c62-bc6d-f84a9b7a356c" />
    - Click `Save & Use This Rubric` if you create a custom rubric. Custom rubrics are temporary for the current session and do not have calibration essays.
-3. Add the document:
+4. Add the document:
    - Paste text directly into `Document Text`, or
    - Upload a `.txt`, `.pdf`, `.docx`, or `.doc` file and click `Extract Text From File`.
-4. Click `Create Session`. The app stores the selected rubric and document text in memory.
-5. Optional: click `Run Fact Check` to extract verifiable claims, search live web sources through OpenAI web search, and return verdicts with source links.
-6. Click `Run Grading` to score the paper against the selected rubric. The result includes:
+5. Click `Create Session`. The app stores the selected rubric and document text in memory.
+6. Optional: click `Run Fact Check` to extract verifiable claims, search live web sources through OpenAI web search, and return verdicts with source links.
+<img width="1309" height="752" alt="Screenshot 2026-04-20 at 2 35 50 PM" src="https://github.com/user-attachments/assets/2cc15b44-d2af-4021-b7c3-4b4f09bab993" />
+8. Click `Run Grading` to score the paper against the selected rubric. The result includes:
    - Overall score and letter grade.
    - Summary strengths and priority revisions.
    - A named criteria breakdown using actual criterion names and category names rather than only codes like `A1` or `B1`.
    - Evidence quotes and rubric-anchored justifications.
-7. After grading, use `Rewrite Essay` if you want the app to rewrite the full essay around the weakest criteria.
-8. Use `Generate Edits` for grammar and clarity suggestions.
-9. Use `Ask` in `Follow-up Q&A` to ask questions about the document, rubric, grading result, or revision priorities.
-10. Restarting the app clears in-memory sessions and temporary custom rubrics.
+<img width="1382" height="821" alt="Screenshot 2026-04-20 at 2 37 04 PM" src="https://github.com/user-attachments/assets/e7c4106d-18ae-4640-af1a-0bc5a7d59f48" />
+9. After grading, use `Rewrite Essay` if you want the app to rewrite the full essay around the weakest criteria.
+10. Use `Generate Edits` for grammar and clarity suggestions.
+<img width="1342" height="716" alt="Screenshot 2026-04-20 at 2 38 02 PM" src="https://github.com/user-attachments/assets/21efdb20-43da-437b-ba1b-33a44d2d3bca" />
+11. Use `Ask` in `Follow-up Q&A` to ask questions about the document, rubric, grading result, or revision priorities.
+<img width="1280" height="535" alt="Screenshot 2026-04-20 at 2 38 46 PM" src="https://github.com/user-attachments/assets/2aff3d78-c8e3-4989-b15e-a52a261a6eb8" />
+12. Restarting the app clears in-memory sessions and temporary custom rubrics.
 
 ## Example Essays
 
