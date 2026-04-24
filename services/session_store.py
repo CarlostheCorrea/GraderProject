@@ -13,6 +13,7 @@ class SessionRecord:
     rubric_id: str
     rubric_json: dict
     grading_result: Optional[dict] = None
+    factcheck_result: Optional[dict] = None
     conversation: List[dict] = field(default_factory=list)
 
 

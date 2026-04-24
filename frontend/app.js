@@ -390,9 +390,10 @@ function formatFactCheckResult(data) {
   const verdictLabel = { Supported: "✓ Supported", Contradicted: "✗ Contradicted", Unverifiable: "? Unverifiable" };
   const verdictClass = { Supported: "verdict-supported", Contradicted: "verdict-contradicted", Unverifiable: "verdict-unverifiable" };
 
-  const cardsHtml = claims.map((c) => {
+  const cardsHtml = claims.map((c, index) => {
     const vClass = verdictClass[c.verdict] || "verdict-unverifiable";
     const vLabel = verdictLabel[c.verdict] || c.verdict;
+    const canUseInRewrite = Boolean(c.source_url || c.source_title);
     const sourceHtml = c.source_url
       ? `<a class="claim-source" href="${esc(c.source_url)}" target="_blank" rel="noopener">
            <span class="claim-source-icon">↗</span>${esc(c.source_title || c.source_url)}
@@ -410,11 +411,25 @@ function formatFactCheckResult(data) {
         <div class="claim-body">
           <div class="claim-explanation">${esc(c.explanation)}</div>
           ${sourceHtml}
+          ${
+            canUseInRewrite
+              ? `<label class="claim-toggle-row">
+                   <input type="checkbox" class="claim-rewrite-toggle" data-claim-index="${index}" />
+                   <span>Use this source in rewrite</span>
+                 </label>`
+              : ""
+          }
         </div>
       </div>`;
   }).join("");
 
-  return `<div class="factcheck-list">${cardsHtml}</div>`;
+  return `
+    <div class="factcheck-list">${cardsHtml}</div>
+    <div class="factcheck-action-row">
+      <button class="rewrite-btn" id="rewrite-from-sources-btn" disabled>Apply Selected Sources</button>
+      <span class="rewrite-action-hint">Select the fact-check sources you want the rewrite to use, then apply them.</span>
+    </div>
+    <div id="factcheck-rewrite-panel" class="rewrite-panel" style="display:none;"></div>`;
 }
 
 function renderRewriteResult(panel, data) {
@@ -469,6 +484,51 @@ els.factcheckForm.addEventListener("submit", async (event) => {
     notify(error.message, true);
   } finally {
     setLoading(els.factcheckForm, false);
+  }
+});
+
+els.factcheckResult.addEventListener("change", (event) => {
+  const toggle = event.target.closest(".claim-rewrite-toggle");
+  if (!toggle) return;
+  const toggles = els.factcheckResult.querySelectorAll(".claim-rewrite-toggle:checked");
+  const btn = document.getElementById("rewrite-from-sources-btn");
+  if (btn) {
+    btn.disabled = toggles.length === 0;
+  }
+});
+
+els.factcheckResult.addEventListener("click", async (event) => {
+  const btn = event.target.closest("#rewrite-from-sources-btn");
+  if (!btn) return;
+
+  const selectedClaimIndices = Array.from(
+    els.factcheckResult.querySelectorAll(".claim-rewrite-toggle:checked")
+  )
+    .map((input) => Number.parseInt(input.dataset.claimIndex, 10))
+    .filter(Number.isInteger);
+
+  if (selectedClaimIndices.length === 0) {
+    notify("Select at least one source-backed fact-check result first.", true);
+    return;
+  }
+
+  const panel = document.getElementById("factcheck-rewrite-panel");
+  btn.disabled = true;
+  btn.textContent = "Applying…";
+  try {
+    requireSession();
+    const result = await api(`/sessions/${state.sessionId}/rewrite-from-sources`, {
+      method: "POST",
+      body: JSON.stringify({ selected_claim_indices: selectedClaimIndices }),
+    });
+    renderRewriteResult(panel, result);
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    notify("Source-based rewrite ready.");
+  } catch (error) {
+    notify(error.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Apply Selected Sources";
   }
 });
 

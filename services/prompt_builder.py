@@ -162,6 +162,53 @@ def build_rewrite_messages(
     ]
 
 
+def build_source_rewrite_messages(
+    document_text: str,
+    selected_claims: list,
+) -> List[dict]:
+    claim_rows: list[str] = []
+    for c in selected_claims:
+        source_label = c.get("source_title") or "Unknown source"
+        source_url = c.get("source_url") or ""
+        source_suffix = f" ({source_url})" if source_url else ""
+        claim_rows.append(
+            f"- Claim: {c['claim']}\n"
+            f"  Verdict: {c['verdict']}\n"
+            f"  Explanation: {c['explanation']}\n"
+            f"  Source: {source_label}{source_suffix}"
+        )
+    claims_block = "\n".join(claim_rows)
+    return [
+        {
+            "role": "system",
+            "content": (
+                "You are a writing coach. Rewrite the student's full essay using only the selected "
+                "fact-check findings the user approved. "
+                "Rules:\n"
+                "1. Preserve the student's voice, topic, and core argument unless a selected finding requires correction.\n"
+                "2. Correct or refine claims that conflict with selected source-backed findings.\n"
+                "3. Do not invent new research, URLs, or quotations.\n"
+                "4. Keep the same overall length (within 15%).\n"
+                "5. Do not add a bibliography or citation format unless it already exists in the essay.\n"
+                "Return JSON only with these exact fields:\n"
+                "- rewritten_essay: the full improved essay as a single string\n"
+                "- changes_made: list of 2-6 specific source-grounded changes made\n"
+                "- criteria_addressed: list of short labels for the issues fixed\n"
+                "- sources_used: list of source titles or URLs actually relied on"
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Selected fact-check findings to use in the rewrite:\n{claims_block}\n\n"
+                f"Original essay:\n{document_text[:7000]}\n\n"
+                "Rewrite the full essay so it aligns with the selected findings. "
+                "Return JSON with rewritten_essay, changes_made, criteria_addressed, and sources_used."
+            ),
+        },
+    ]
+
+
 def build_rubric_from_description_messages(description: str, schema_hint: str) -> List[dict]:
     return [
         {

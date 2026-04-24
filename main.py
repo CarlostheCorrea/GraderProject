@@ -23,6 +23,7 @@ from schemas import (
     ImportRubricRequest,
     RewriteOutput,
     RewriteRequest,
+    SourceRewriteRequest,
     RubricInfo,
 )
 from services.document_extractor import SUPPORTED_EXTENSIONS, extract_text_from_file
@@ -324,6 +325,51 @@ def rewrite_essay(session_id: str):
     return result
 
 
+@app.post("/sessions/{session_id}/rewrite-from-sources", response_model=RewriteOutput)
+def rewrite_essay_from_sources(session_id: str, req: SourceRewriteRequest):
+    session = session_store.get(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if not session.factcheck_result:
+        raise HTTPException(status_code=400, detail="Run fact check first before source-based rewriting")
+    if rewriter is None:
+        raise HTTPException(status_code=500, detail="Rewriter not initialized")
+
+    claims = session.factcheck_result.get("claims", [])
+    selected_claims = []
+    seen = set()
+    for idx in req.selected_claim_indices:
+        if idx in seen:
+            continue
+        seen.add(idx)
+        if idx < 0 or idx >= len(claims):
+            raise HTTPException(status_code=400, detail=f"Invalid fact-check claim index: {idx}")
+        claim = claims[idx]
+        if not claim.get("source_title") and not claim.get("source_url"):
+            raise HTTPException(status_code=400, detail="Selected claim does not include a usable source")
+        selected_claims.append(claim)
+
+    logger.info(
+        "Request received. type=rewrite_from_sources session_id=%s selected_claims=%s",
+        session_id,
+        len(selected_claims),
+    )
+
+    result = rewriter.rewrite_with_sources(
+        document_text=session.document_text,
+        selected_claims=selected_claims,
+    )
+
+    session.conversation.append(
+        {
+            "role": "assistant",
+            "content": f"Source-based rewrite complete. Used {len(selected_claims)} selected fact-check findings.",
+        }
+    )
+    session_store.update(session)
+    return result
+
+
 @app.post("/sessions/{session_id}/factcheck", response_model=FactCheckOutput)
 def factcheck_session(session_id: str):
     session = session_store.get(session_id)
@@ -335,6 +381,7 @@ def factcheck_session(session_id: str):
     logger.info("Request received. type=factcheck session_id=%s doc_chars=%s", session_id, len(session.document_text))
 
     result = fact_checker.check(session.document_text)
+    session.factcheck_result = result
     session.conversation.append({"role": "assistant", "content": f"Fact-check complete. {len(result.get('claims', []))} claims checked."})
     session_store.update(session)
     return result
@@ -356,5 +403,4 @@ def import_rubric(req: ImportRubricRequest):
     logger.info("Request received. type=import_rubric text_chars=%s", len(req.rubric_text))
     result = rubric_builder.generate_from_import(req.rubric_text)
     return result
-
 

@@ -98,6 +98,7 @@ class RewriteOutput(BaseModel):
     rewritten_essay: str
     changes_made: List[str] = Field(default_factory=list)
     criteria_addressed: List[str] = Field(default_factory=list)
+    sources_used: List[str] = Field(default_factory=list)
 
 
 class FactCheckClaim(BaseModel):
@@ -110,6 +111,10 @@ class FactCheckClaim(BaseModel):
 
 class FactCheckOutput(BaseModel):
     claims: List[FactCheckClaim]
+
+
+class SourceRewriteRequest(BaseModel):
+    selected_claim_indices: List[int] = Field(min_length=1)
 
 
 class BuildRubricRequest(BaseModel):

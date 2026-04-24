@@ -871,6 +871,21 @@ button:disabled {
   padding-top: 0.65rem;
 }
 
+.claim-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.7rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.claim-toggle-row input {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
 .claim-explanation {
   font-size: 0.84rem;
   color: var(--muted);
@@ -897,6 +912,14 @@ button:disabled {
 
 .claim-source-icon {
   font-size: 0.75rem;
+}
+
+.factcheck-action-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
 }
 
 .toast {
